@@ -21,3 +21,10 @@
   margin: 2rem 0;
   font-weight: bold;
 }
+
+.btns {
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+  gap: 1rem;
+}

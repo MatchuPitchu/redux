@@ -1,10 +1,7 @@
 import Counter from './components/Counter';
 
-
-function App() {
-  return (
-    <Counter />
-  );
-}
+const App = () => {
+  return <Counter />;
+};
 
 export default App;
