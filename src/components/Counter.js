@@ -2,7 +2,7 @@
 // useSelector: you can select a part of state managed by store
 // useStore: select whole store
 import { useSelector, useDispatch } from 'react-redux';
-import { counterActions } from '../store/index';
+import { counterActions } from '../store/counter';
 import classes from './Counter.module.css';
 
 const Counter = () => {
