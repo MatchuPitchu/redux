@@ -1,14 +1,14 @@
-import { createStore } from 'redux';
+// import { createStore } from 'redux';
 // simplify redux using with createSlice (recommended) or createReducer fn;
 import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-const initialState = { counter: 0, showCounter: true };
+const initialCounterState = { counter: 0, showCounter: true };
 
 // 1) State slice with Reducer fn with Redux Toolkit
 // with this fn you can create different slices of the global state to make code more maintainable
 const counterSlice = createSlice({
   name: 'counter',
-  initialState,
+  initialState: initialCounterState,
   // include all reducers methods this slice needs;
   // all methods could have 2 parameters: state, action;
   // a) with this methods, you can dispatch actions without using if statements like in reducer fn bellow
@@ -19,17 +19,33 @@ const counterSlice = createSlice({
   // (e.g. when you call later counterSlice.actions.yourReducerName() Redux Toolkit returns an action obj
   // of this shape: { type: 'some unique identifier' })
   reducers: {
-    increment(state) {
+    increment: (state) => {
       state.counter++;
     },
-    decrement(state) {
+    decrement: (state) => {
       state.counter--;
     },
-    increase(state, action) {
+    increase: (state, action) => {
       state.counter = state.counter + action.payload; // payload is fixed property name of Redux Toolkit
     },
-    toggleCounter(state) {
+    toggleCounter: (state) => {
       state.showCounter = !state.showCounter;
+    },
+  },
+});
+
+// add second slice of global state
+const initialAutchState = { isAuth: false };
+
+const authSlice = createSlice({
+  name: 'authentification',
+  initialState: initialAutchState,
+  reducers: {
+    login: (state) => {
+      state.isAuth = true;
+    },
+    logout: (state) => {
+      state.isAuth = false;
     },
   },
 });
@@ -37,26 +53,26 @@ const counterSlice = createSlice({
 // 2) Reducer with React Redux and without Redux Toolkit
 // reducer function
 // with TypeScript: good approach to use general Enums for action types
-const reducerFn = (state = initialState, action) => {
-  if (action.type === 'increment') {
-    // Redux replaces existing state, NOT merges new state into prev state
-    return { counter: state.counter + 1, showCounter: state.showCounter };
-  }
+// const reducerFn = (state = initialState, action) => {
+//   if (action.type === 'increment') {
+//     // Redux replaces existing state, NOT merges new state into prev state
+//     return { counter: state.counter + 1, showCounter: state.showCounter };
+//   }
 
-  if (action.type === 'decrement') {
-    return { counter: state.counter - 1, showCounter: state.showCounter };
-  }
+//   if (action.type === 'decrement') {
+//     return { counter: state.counter - 1, showCounter: state.showCounter };
+//   }
 
-  if (action.type === 'increase') {
-    return { counter: state.counter + action.value, showCounter: state.showCounter };
-  }
+//   if (action.type === 'increase') {
+//     return { counter: state.counter + action.value, showCounter: state.showCounter };
+//   }
 
-  if (action.type === 'toggle') {
-    return { counter: state.counter, showCounter: !state.showCounter };
-  }
+//   if (action.type === 'toggle') {
+//     return { counter: state.counter, showCounter: !state.showCounter };
+//   }
 
-  return state;
-};
+//   return state;
+// };
 
 // for 2) create store and point at reducer fn
 // const store = createStore(reducerFn);
@@ -68,11 +84,15 @@ const reducerFn = (state = initialState, action) => {
 // if you have only one reducer, then you don't need this obj
 // attention: you point at "reducer", even if you write "reducers" in createSlice()
 const store = configureStore({
-  reducer: counterSlice.reducer,
-  // reducer: { counter: counterSlice.reducer },
+  // reducer: counterSlice.reducer,
+  reducer: {
+    counter: counterSlice.reducer,
+    auth: authSlice.reducer,
+  },
 });
 
 // export action dispatchers that you can use it in other components to update the state
 export const counterActions = counterSlice.actions;
+export const authActions = authSlice.actions;
 
 export default store;

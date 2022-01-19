@@ -12,8 +12,13 @@ const Counter = () => {
   // with useSelector, subscription is automatically set up to the store for this component;
   // if component will be unmounted, subscription is also cleared automatically;
   // if state changes, new state is returned automatically and leads to re-evaluation of component
-  const counter = useSelector((state) => state.counter);
-  const show = useSelector((state) => state.showCounter);
+  // 1) One state slice or only one global state
+  // const counter = useSelector((state) => state.counter);
+  // const show = useSelector((state) => state.showCounter);
+
+  // 2) Redux Toolkit: if you have multiple state slices, use defined key to access specific slice state
+  const counter = useSelector((state) => state.counter.counter);
+  const show = useSelector((state) => state.counter.showCounter);
 
   // dispatch action types
   // const incrementHandler = () => dispatch({ type: 'increment' });
@@ -24,8 +29,10 @@ const Counter = () => {
   // with Redux Toolkit
   const incrementHandler = () => dispatch(counterActions.increment());
   const decrementHandler = () => dispatch(counterActions.decrement());
-  // payload is passed into reducer fn with a simple argument that is converter by Redux Toolkit to a payload property
-  const increaseHandler = () => dispatch(counterActions.increase(5)); // { type: SOME_UNIQUE_IDENTIFIER, payload: 5 }
+  const increaseHandler = () => {
+    // payload is passed into reducer fn with a simple argument that is converter by Redux Toolkit to a payload property
+    dispatch(counterActions.increase(5)); // { type: SOME_UNIQUE_IDENTIFIER, payload: 5 }
+  };
   const toggleCounterHandler = () => dispatch(counterActions.toggleCounter());
 
   return (
