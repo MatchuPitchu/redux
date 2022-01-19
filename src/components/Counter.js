@@ -2,6 +2,7 @@
 // useSelector: you can select a part of state managed by store
 // useStore: select whole store
 import { useSelector, useDispatch } from 'react-redux';
+import { counterActions } from '../store/index';
 import classes from './Counter.module.css';
 
 const Counter = () => {
@@ -15,11 +16,17 @@ const Counter = () => {
   const show = useSelector((state) => state.showCounter);
 
   // dispatch action types
-  const incrementHandler = () => dispatch({ type: 'increment' });
-  const increaseHandler = () => dispatch({ type: 'increase', value: 5 });
-  const decrementHandler = () => dispatch({ type: 'decrement' });
+  // const incrementHandler = () => dispatch({ type: 'increment' });
+  // const decrementHandler = () => dispatch({ type: 'decrement' });
+  // const increaseHandler = () => dispatch({ type: 'increase', value: 5 });
+  // const toggleCounterHandler = () => dispatch({ type: 'toggle' });
 
-  const toggleCounterHandler = () => dispatch({ type: 'toggle' });
+  // with Redux Toolkit
+  const incrementHandler = () => dispatch(counterActions.increment());
+  const decrementHandler = () => dispatch(counterActions.decrement());
+  // payload is passed into reducer fn with a simple argument that is converter by Redux Toolkit to a payload property
+  const increaseHandler = () => dispatch(counterActions.increase(5)); // { type: SOME_UNIQUE_IDENTIFIER, payload: 5 }
+  const toggleCounterHandler = () => dispatch(counterActions.toggleCounter());
 
   return (
     <main className={classes.counter}>
